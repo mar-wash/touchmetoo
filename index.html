@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOUCH ME TOO</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    color: black;
+    font-family: 'Oswald', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Landing overlay */
+#overlay {
+    position: absolute;
+    inset: 0;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Main text container */
+#container {
+    display: flex;
+    gap: 0.2em;
+    font-size: 8vw;
+    letter-spacing: 0.05em;
+}
+
+.letter {
+    display: inline-block;
+    transition: transform 0.5s cubic-bezier(.2,1.8,.3,1),
+                opacity 0.3s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div id="overlay">click to consent</div>
+<div id="container"></div>
+
+<script>
+const phrase = "TOUCH ME, TOO!";
+const container = document.getElementById("container");
+const overlay = document.getElementById("overlay");
+
+const letters = [];
+
+phrase.split("").forEach(char => {
+    const span = document.createElement("span");
+    span.classList.add("letter");
+    span.textContent = char;
+    container.appendChild(span);
+    letters.push(span);
+});
+
+overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+    initAudio();
+});
+
+function initAudio() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 1024;
+
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+
+        const timeData = new Uint8Array(analyser.fftSize);
+
+        let triggered = false;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            analyser.getByteTimeDomainData(timeData);
+
+            let sum = 0;
+            for (let i = 0; i < timeData.length; i++) {
+                let val = (timeData[i] - 128) / 128;
+                sum += val * val;
+            }
+            let volume = Math.sqrt(sum / timeData.length);
+
+            const threshold = 0.08;
+
+            if (volume > threshold && !triggered) {
+                triggered = true;
+
+                let validIndexes = letters
+                    .map((l, i) => l.textContent !== " " ? i : null)
+                    .filter(i => i !== null);
+
+                const activeIndex = validIndexes[
+                    Math.floor(Math.random() * validIndexes.length)
+                ];
+
+                letters.forEach((letter, index) => {
+                    if (index === activeIndex) {
+                        letter.style.transform = "scale(8)";
+                        letter.style.opacity = "1";
+                    } else {
+                        letter.style.transform = "scale(0.2)";
+                        letter.style.opacity = "0.2";
+                    }
+                });
+            }
+
+            if (volume < threshold * 0.6) {
+                triggered = false;
+
+                letters.forEach(letter => {
+                    letter.style.transform = "scale(1)";
+                    letter.style.opacity = "1";
+                });
+            }
+        }
+
+        animate();
+    })
+    .catch(() => {
+        overlay.innerHTML = "MICROPHONE ACCESS REQUIRED";
+    });
+}
+</script>
+
+</body>
+</html>
