@@ -19,10 +19,32 @@ body {
     color: black;
     font-family: 'Oswald', sans-serif;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+}
+
+/* NAVIGATION */
+nav {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    display: flex;
+    gap: 30px;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    z-index: 20;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    transition: opacity 0.3s ease;
+}
+
+nav a:hover {
+    opacity: 0.4;
 }
 
 /* Landing overlay */
@@ -34,7 +56,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 3rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     cursor: pointer;
     z-index: 10;
 }
@@ -57,7 +79,13 @@ body {
 
 <body>
 
-<div id="overlay">click to consent</div>
+<nav>
+    <a href="about.html">ABOUT</a>
+    <a href="minigames.html">MINIGAMES</a>
+    <a href="design.html">DESIGN</a>
+</nav>
+
+<div id="overlay">CLICK TO CONSENT</div>
 <div id="container"></div>
 
 <script>
