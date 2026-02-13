@@ -30,15 +30,11 @@ nav {
     position: fixed;
     top: 20px;
     right: 40px;
-    display: flex;
+    display: none;              /* hidden initially */
     gap: 30px;
     font-size: 1.2rem;
     letter-spacing: 0.1em;
     z-index: 1000;
-
-    opacity: 0;              /* hidden initially */
-    pointer-events: none;    /* not clickable */
-    transition: opacity 0.6s ease;
 }
 
 nav a {
@@ -52,9 +48,20 @@ nav a:hover {
     opacity: 0.4;
 }
 
+/* Show nav with fade-in */
+nav.show {
+    display: flex;
+    opacity: 0;
+    animation: fadeIn 0.6s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
 /* Landing overlay */
 #overlay {
-    position: fixed;  /* IMPORTANT FIX */
+    position: fixed;
     inset: 0;
     background: white;
     display: flex;
@@ -82,7 +89,6 @@ nav a:hover {
                 opacity 0.3s ease;
 }
 </style>
-
 </head>
 
 <body>
@@ -97,10 +103,10 @@ nav a:hover {
 <div id="container"></div>
 
 <script>
+// Create letters
 const phrase = "TOUCH ME, TOO!";
 const container = document.getElementById("container");
 const overlay = document.getElementById("overlay");
-
 const letters = [];
 
 phrase.split("").forEach(char => {
@@ -111,16 +117,18 @@ phrase.split("").forEach(char => {
     letters.push(span);
 });
 
+// Click to consent
 overlay.addEventListener("click", () => {
     overlay.style.display = "none";
 
+    // Show nav
     const nav = document.querySelector("nav");
-    nav.style.opacity = "1";
-    nav.style.pointerEvents = "auto";
+    nav.classList.add("show");
 
     initAudio();
 });
 
+// Initialize microphone
 function initAudio() {
     navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -154,7 +162,7 @@ function initAudio() {
                 triggered = true;
 
                 let validIndexes = letters
-                    .map((l, i) => l.textContent !== " " ? i : null)
+                    .map((l, i) => l.textContent.trim() !== "" ? i : null)
                     .filter(i => i !== null);
 
                 const activeIndex = validIndexes[
