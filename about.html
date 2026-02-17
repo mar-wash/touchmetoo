@@ -16,10 +16,28 @@
 
 body {
     background: #000;
-    color: #f5f5f5;
+    color: #ffffff; /* Stark white */
     font-family: 'Oswald', sans-serif;
     line-height: 1.7;
     padding: 8vw 12vw;
+}
+
+/* Top left return link */
+.home-link {
+    position: fixed;
+    top: 30px;
+    left: 40px;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #ffffff;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.home-link:hover {
+    opacity: 1;
 }
 
 h1 {
@@ -36,7 +54,6 @@ h2 {
     margin-top: 4rem;
     margin-bottom: 1.5rem;
     letter-spacing: 1px;
-    opacity: 0.8;
 }
 
 p {
@@ -51,9 +68,9 @@ p {
 }
 
 .subtle {
-    opacity: 0.6;
+    opacity: 0.8;
     font-size: 0.95rem;
-    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 @media (max-width: 768px) {
@@ -64,16 +81,23 @@ p {
     h1 {
         font-size: 2.2rem;
     }
+
+    .home-link {
+        left: 20px;
+        top: 20px;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<a href="index.html" class="home-link">Touch Me, Too!</a>
+
 <h1>About</h1>
 
 <div class="section">
-    <h2>Touch Me, Too!</h2>
+    <h2>The Project</h2>
 
     <p>
         <strong>Touch Me, Too!</strong> is an interactive digital artwork and sensory installation that explores the threshold between language, technology, and embodiment.
@@ -84,7 +108,7 @@ p {
     </p>
 
     <p>
-        Through a corpus analysis of English-language data, the project traces explicit mappings between human anatomy and computer architecture, identifying where body parts are projected onto hardware and software systems. Where does the body end and the machine begin?
+        Through a corpus analysis of English-language data, the project traces explicit mappings between human anatomy and computer architecture, identifying where body parts are projected onto hardware and software systems.
     </p>
 
     <p>
@@ -97,17 +121,19 @@ p {
 </div>
 
 <div class="section">
-    <h2>Artist Bio</h2>
+    <h2>About the Artist</h2>
 
-    <p class="subtle">Born 2003, Houston, TX. Based in Boulder, CO.</p>
-
-    <p>
-        Marshall Washington is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment. After receiving dual bachelor's degrees in Linguistics and Chinese from the University of Oklahoma, he is currently a master’s student in the Linguistics department at the University of Colorado Boulder.
+    <p class="subtle">
+        Born 2003, Houston, TX. Based in Boulder, CO.
     </p>
 
     <p>
-        As a linguist, he seeks to understand what happens when humans share language with computers. Across both scholarly and creative work, he returns to one central question: what happens when language breaks its own rules?
-    </p>
+       Marshall Washington is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment. After receiving dual bachelor's degrees in Linguistics and Chinese from the University of Oklahoma, Marshall is a current master's student within the Linguistics department at the University of Colorado Boulder.
 
     <p>
-        His projects integrate linguistics, anthropology, digital
+      As a linguist, he seeks to understand what happens when humans share language with computers. Across scholarly and creative work, he returns to one central question: what happens when language breaks its own rules? His projects incorporate linguistics, anthropology, digital humanities, and creative computing.
+    </p>
+</div>
+
+</body>
+</html>
