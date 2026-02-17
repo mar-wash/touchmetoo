@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+/* 1. CREATIVE RESET & LAYOUT */
 * {
     margin: 0;
     padding: 0;
@@ -15,77 +16,143 @@
 }
 
 body {
-    background: #000;
-    color: #ffffff; /* Stark white */
+    background: #050505;
+    color: #ffffff;
     font-family: 'Oswald', sans-serif;
-    line-height: 1.7;
-    padding: 8vw 12vw;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* Top left return link */
+/* 2. THE BACKGROUND TEXT (Watermark Effect) */
+body::before {
+    content: "HUMAN MACHINE SENSORY DATA";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    font-size: 15vw;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.03);
+    z-index: -1;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* 3. NAVIGATION */
 .home-link {
     position: fixed;
     top: 30px;
     left: 40px;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-decoration: none;
     color: #ffffff;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 5px;
+    z-index: 100;
+    transition: all 0.3s ease;
 }
 
 .home-link:hover {
+    border-bottom-color: #fff;
+    letter-spacing: 5px;
+}
+
+/* 4. MAIN CONTAINER */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    padding: 10vh 5vw;
+}
+
+/* 5. PROJECT SECTION (Left Side) */
+.project-side {
+    flex: 1;
+    min-width: 350px;
+    padding: 40px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 6. ARTIST SECTION (Right Side) */
+.artist-side {
+    flex: 1;
+    min-width: 350px;
+    padding: 40px;
+}
+
+/* 7. THE PHOTO SPACE */
+.artist-photo-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 4 / 5;
+    background: #111;
+    margin-bottom: 2rem;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.2);
+    overflow: hidden;
+    /* This creates a "scanner" or "digital" feel */
+}
+
+.artist-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    opacity: 0.8;
+    transition: 0.5s ease;
+}
+
+.artist-photo-container:hover img {
+    filter: grayscale(0%);
     opacity: 1;
 }
 
+/* 8. TYPOGRAPHY */
 h1 {
     font-weight: 600;
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    letter-spacing: 2px;
+    font-size: 5rem;
+    letter-spacing: -2px;
     text-transform: uppercase;
+    margin-bottom: 2rem;
+    line-height: 0.9;
 }
 
 h2 {
     font-weight: 400;
-    font-size: 1.5rem;
-    margin-top: 4rem;
+    font-size: 0.9rem;
     margin-bottom: 1.5rem;
-    letter-spacing: 1px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #888;
 }
 
 p {
     font-weight: 300;
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
-    max-width: 800px;
+    max-width: 500px;
 }
 
-.section {
-    margin-bottom: 4rem;
+em {
+    color: #aaa;
+    font-style: italic;
 }
 
 .subtle {
-    opacity: 0.8;
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    border-left: 2px solid #fff;
+    padding-left: 15px;
 }
 
-@media (max-width: 768px) {
-    body {
-        padding: 15vw 8vw;
-    }
-
-    h1 {
-        font-size: 2.2rem;
-    }
-
-    .home-link {
-        left: 20px;
-        top: 20px;
-    }
+/* 9. RESPONSIVENESS */
+@media (max-width: 900px) {
+    .project-side { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    h1 { font-size: 3.5rem; }
 }
 </style>
 </head>
@@ -94,45 +161,59 @@ p {
 
 <a href="index.html" class="home-link">Touch Me, Too!</a>
 
-<h1>About</h1>
+<div class="container">
+    
+    <div class="project-side">
+        <h1>About</h1>
+        <h2>The Project</h2>
 
-<div class="section">
-    <h2>The Project</h2>
+        <p>
+            <strong>Touch Me, Too!</strong> is an interactive digital artwork and sensory installation that explores the threshold between language, technology, and embodiment.
+        </p>
 
-    <p>
-        <strong>Touch Me, Too!</strong> is an interactive digital artwork and sensory installation that explores the threshold between language, technology, and embodiment.
-    </p>
+        <p>
+            Drawing from conceptual metaphor theory, the project begins with a linguistic observation: we routinely describe computers using the language of the human body. Machines have “memory,” “vision,” “voice,” “nerves,” “brains,” and “bodies.” 
+        </p>
 
-    <p>
-        Drawing from conceptual metaphor theory, the project begins with a linguistic observation: we routinely describe computers using the language of the human body. Machines have “memory,” “vision,” “voice,” “nerves,” “brains,” and “bodies.” If metaphor structures thought, as Lakoff (1992) argues, what does it mean that we so readily understand COMPUTERS as HUMANS?
-    </p>
+        <p>
+            If metaphor structures thought, what does it mean that we so readily understand <strong>COMPUTERS as HUMANS</strong>?
+        </p>
 
-    <p>
-        Through a corpus analysis of English-language data, the project traces explicit mappings between human anatomy and computer architecture, identifying where body parts are projected onto hardware and software systems.
-    </p>
+        <p>
+            Through a corpus analysis of English-language data, the project traces explicit mappings between human anatomy and computer architecture, identifying where body parts are projected onto hardware and software systems.
+        </p>
 
-    <p>
-        In its physical form, <em>Touch Me, Too!</em> becomes a sensory environment in which visitors are invited to encounter the computer as something that can touch and be touched. Participants may press, stroke, or hold components that respond through vibration, heat, or sound, collapsing the emotional distance between user and interface.
-    </p>
+        <p>
+            The installation asks: What happens to our experience of technology when the linguistic boundary between humans and computers begins to blur?
+        </p>
+    </div>
 
-    <p>
-        The installation asks: What happens to our experience of technology when the linguistic boundary between humans and computers begins to blur?
-    </p>
-</div>
+    <div class="artist-side">
+        
+        <div class="artist-photo-container">
+            <img src="artist-image.jpg" alt="Marshall Washington">
+            <div style="position:absolute; bottom:10px; left:10px; font-size:10px; color:rgba(255,255,255,0.5)">IMG_REF: MW_01</div>
+        </div>
 
-<div class="section">
-    <h2>About the Artist</h2>
+        <h2>The Artist</h2>
+        
+        <p class="subtle">
+            Born 2003, Houston, TX.<br>
+            Based in Boulder, CO.
+        </p>
 
-    <p class="subtle">
-        Born 2003, Houston, TX. Based in Boulder, CO.
-    </p>
+        <p>
+            <strong>Marshall Washington</strong> is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment. After receiving dual bachelor's degrees in Linguistics and Chinese from the University of Oklahoma, he is currently a master’s student at CU Boulder.
+        </p>
 
-    <p>
-       Marshall Washington is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment. After receiving dual bachelor's degrees in Linguistics and Chinese from the University of Oklahoma, Marshall is a current master's student within the Linguistics department at the University of Colorado Boulder.
+        <p>
+            As a linguist, he seeks to understand what happens when humans share language with computers. Across both scholarly and creative work, he returns to one central question: <em>what happens when language breaks its own rules?</em>
+        </p>
 
-    <p>
-      As a linguist, he seeks to understand what happens when humans share language with computers. Across scholarly and creative work, he returns to one central question: what happens when language breaks its own rules? His projects incorporate linguistics, anthropology, digital humanities, and creative computing.
-    </p>
+        <p>
+            His projects integrate linguistics, anthropology, and creative computing, transforming theoretical inquiry into <strong>embodied experience</strong>.
+        </p>
+    </div>
 </div>
 
 </body>
