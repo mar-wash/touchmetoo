@@ -5,10 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — Touch Me, Too!</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* 1. GLOBAL STYLES */
 * {
     margin: 0;
     padding: 0;
@@ -16,78 +15,86 @@
 }
 
 body {
-    background: #050505; /* Deep black */
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
     font-family: 'Oswald', sans-serif;
     line-height: 1.6;
     overflow-x: hidden;
 }
 
-/* 2. THE TOP HEADER (STAYS AT TOP) */
-.top-header {
+header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 80px; 
-    background: rgba(5, 5, 5, 0.85); /* Semi-transparent */
-    backdrop-filter: blur(15px);   /* Blurs content passing behind it */
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 0 40px;
-    z-index: 1000; /* Keeps it above everything else */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.home-link {
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+.site-title {
     text-decoration: none;
-    color: #ffffff;
-    transition: all 0.3s ease;
+    color: black;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
 }
 
-.home-link:hover {
-    letter-spacing: 5px;
-    color: #aaa;
+nav {
+    display: flex;
+    gap: 30px;
 }
 
-/* 3. MAIN CONTENT LAYOUT */
+nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    transition: opacity 0.3s ease;
+}
+
+nav a:hover {
+    opacity: 0.4;
+}
+
 .container {
     display: flex;
     flex-wrap: wrap;
     min-height: 100vh;
-    padding-top: 120px; /* Pushes content down so header doesn't hide it */
+    padding-top: 120px; 
     padding-left: 5vw;
     padding-right: 5vw;
     padding-bottom: 10vh;
 }
 
-/* Left Side: The Project */
 .project-side {
     flex: 1.2;
     min-width: 350px;
     padding: 20px 40px;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    border-right: 1px solid rgba(0,0,0,0.1);
 }
 
-/* Right Side: The Artist */
 .artist-side {
     flex: 1;
     min-width: 350px;
     padding: 20px 40px;
 }
 
-/* 4. PHOTO PLACEHOLDER */
 .artist-photo-container {
     width: 100%;
     max-width: 380px;
     aspect-ratio: 4 / 5;
-    background: #111;
+    background: #f0f0f0;
     margin-bottom: 2rem;
     position: relative;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(0,0,0,0.1);
     overflow: hidden;
 }
 
@@ -95,19 +102,17 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%) contrast(1.1);
+    filter: grayscale(100%);
     transition: 0.6s ease;
 }
 
 .artist-photo-container:hover img {
-    filter: grayscale(0%) contrast(1);
-    transform: scale(1.05);
+    filter: grayscale(0%);
 }
 
-/* 5. TYPOGRAPHY */
 h1 {
-    font-weight: 600;
-    font-size: clamp(3rem, 8vw, 5rem); /* Responsive size */
+    font-weight: 700;
+    font-size: clamp(3rem, 8vw, 5rem);
     letter-spacing: -2px;
     text-transform: uppercase;
     margin-bottom: 2.5rem;
@@ -120,7 +125,7 @@ h2 {
     margin-bottom: 1.5rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: #888;
+    color: #666;
 }
 
 p {
@@ -128,7 +133,6 @@ p {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
     max-width: 550px;
-    color: rgba(255,255,255,0.9);
 }
 
 .subtle {
@@ -136,79 +140,50 @@ p {
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-bottom: 2rem;
-    border-left: 2px solid #fff;
+    border-left: 2px solid #000;
     padding-left: 15px;
-    color: #aaa;
 }
 
-/* 6. MOBILE FIXES */
 @media (max-width: 900px) {
-    .project-side { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 60px; }
-    .artist-side { padding-top: 60px; }
-    .top-header { padding: 0 20px; height: 60px; }
-    .container { padding-top: 90px; }
+    .project-side { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 40px; }
+    .artist-side { padding-top: 40px; }
+    header { padding: 0 20px; }
+    nav { gap: 15px; }
+    nav a, .site-title { font-size: 0.9rem; }
 }
 </style>
 </head>
 
 <body>
 
-<header class="top-header">
-    <a href="index.html" class="home-link">Touch Me, Too!</a>
+<header>
+    <a href="index.html" class="site-title">TOUCH ME, TOO!</a>
+    <nav>
+        <a href="about.html" style="opacity: 0.4;">ABOUT</a>
+        <a href="minigames.html">MINIGAMES</a>
+        <a href="design.html">DESIGN</a>
+    </nav>
 </header>
 
 <div class="container">
-    
     <section class="project-side">
         <h1>About</h1>
         <h2>The Project</h2>
-
-        <p>
-            <strong>Touch Me, Too!</strong> is an interactive digital artwork and sensory installation that explores the threshold between language, technology, and embodiment.
-        </p>
-
-        <p>
-            Drawing from conceptual metaphor theory, the project begins with a linguistic observation: we routinely describe computers using the language of the human body. Machines have “memory,” “vision,” “voice,” “nerves,” “brains,” and “bodies.” 
-        </p>
-
-        <p>
-            If metaphor structures thought, what does it mean that we so readily understand <strong>COMPUTERS as HUMANS</strong>?
-        </p>
-
-        <p>
-            In its physical form, <em>Touch Me, Too!</em> becomes a sensory environment in which visitors are invited to encounter the computer as something that can touch and be touched. 
-        </p>
-
-        <p>
-            The installation asks: What happens to our experience of technology when the linguistic boundary between humans and computers begins to blur?
-        </p>
+        <p><strong>Touch Me, Too!</strong> is an interactive digital artwork and sensory installation that explores the threshold between language, technology, and embodiment.</p>
+        <p>Drawing from conceptual metaphor theory, the project begins with a linguistic observation: we routinely describe computers using the language of the human body. Machines have “memory,” “vision,” “voice,” “nerves,” “brains,” and “bodies.”</p>
+        <p>If metaphor structures thought, what does it mean that we so readily understand <strong>COMPUTERS as HUMANS</strong>?</p>
+        <p>The installation asks: What happens to our experience of technology when the linguistic boundary between humans and computers begins to blur?</p>
     </section>
 
     <section class="artist-side">
-        
         <div class="artist-photo-container">
             <img src="your-image.jpg" alt="Marshall Washington">
-            <div style="position:absolute; bottom:10px; left:10px; font-size:10px; color:rgba(255,255,255,0.4); font-family:monospace;">REF_ID: ARTIST_01</div>
+            <div style="position:absolute; bottom:10px; left:10px; font-size:10px; color:rgba(0,0,0,0.4); font-family:monospace;">REF_ID: ARTIST_01</div>
         </div>
-
         <h2>The Artist</h2>
-        
-        <p class="subtle">
-            Born 2003, Houston, TX.<br>
-            Based in Boulder, CO.
-        </p>
-
-        <p>
-            <strong>Marshall Washington</strong> is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment. 
-        </p>
-
-        <p>
-            After receiving dual bachelor's degrees in Linguistics and Chinese from the University of Oklahoma, he is currently a master’s student in the Linguistics department at the University of Colorado Boulder.
-        </p>
-
-        <p>
-            As a linguist, he seeks to understand what happens when humans share language with computers. Across both scholarly and creative work, he returns to one central question: <em>what happens when language breaks its own rules?</em>
-        </p>
+        <p class="subtle">Born 2003, Houston, TX.<br>Based in Boulder, CO.</p>
+        <p><strong>Marshall Washington</strong> is an interdisciplinary artist and researcher whose work explores the threshold between language, technology, and embodiment.</p>
+        <p>His projects integrate linguistics, anthropology, and creative computing, transforming theoretical inquiry into <strong>embodied experience</strong>.</p>
     </section>
 </div>
 
