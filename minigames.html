@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minigames — Touch Me, Too!</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Oswald', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px; 
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .site-title {
+            text-decoration: none;
+            color: black;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            transition: opacity 0.3s ease;
+        }
+
+        nav a:hover {
+            opacity: 0.4;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            padding-top: 150px; 
+            padding-left: 5vw;
+            padding-right: 5vw;
+            padding-bottom: 10vh;
+            max-width: 800px; /* Narrower for a more intimate feel */
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            line-height: 0.8;
+        }
+
+        .game-link-wrapper {
+            margin-top: 20px;
+        }
+
+        .game-card {
+            text-decoration: none;
+            color: black;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding: 40px 0;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .game-card:hover {
+            padding-left: 20px;
+            border-color: #000;
+        }
+
+        .game-card:hover .arrow {
+            transform: translateX(10px);
+        }
+
+        .game-card h2 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .game-card .subheading {
+            font-weight: 400;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .game-card p {
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 0 20px; }
+            nav { gap: 15px; }
+            nav a, .site-title { font-size: 0.9rem; }
+            h1 { margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="site-title">TOUCH ME, TOO!</a>
+    <nav>
+        <a href="about.html">ABOUT</a>
+        <a href="minigames.html" style="opacity: 0.4;">MINIGAMES</a>
+        <a href="design.html">DESIGN</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Minigames</h1>
+    
+    <div class="game-link-wrapper">
+        <a href="troubleshooter-simulator.html" class="game-card">
+            <h2>Troubleshooter Simulator</h2>
+            <p>Oh no! There's a sick computer.... and YOU'RE the doctor ;) Run the troubleshooter to find out what's wrong.</p>
+            <div class="arrow">→</div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
