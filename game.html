@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Troubleshooter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --fg: #ffffff;
+    --dim: #888888;
+    --bg: #000000;
+    --mid: #222222;
+    --border: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111;
+    color: var(--fg);
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* CRT scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  #terminal {
+    width: 560px;
+    border: 2px solid var(--border);
+    box-shadow: 0 0 24px rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+    animation: flicker 8s infinite;
+  }
+
+  @keyframes flicker {
+    0%,100%{opacity:1} 93%{opacity:1} 94%{opacity:0.8} 95%{opacity:1} 98%{opacity:0.9} 99%{opacity:1}
+  }
+
+  #titlebar {
+    background: var(--fg);
+    color: var(--bg);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    user-select: none;
+    letter-spacing: 1px;
+  }
+
+  #game-area {
+    position: relative;
+    height: 280px;
+    background: var(--bg);
+    cursor: crosshair;
+    overflow: hidden;
+  }
+
+  /* Grid background */
+  #game-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  #virus {
+    position: absolute;
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    color: var(--fg);
+    text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    cursor: pointer;
+    user-select: none;
+    line-height: 1;
+    z-index: 5;
+  }
+  #virus:hover {
+    text-shadow: 0 0 16px #fff, 0 0 30px rgba(255,255,255,0.6);
+  }
+  #virus.clicked {
+    animation: virusHit 0.2s ease-out;
+  }
+  @keyframes virusHit {
+    0%  { transform: scale(1.6); }
+    100%{ transform: scale(1); }
+  }
+
+
+  #hud {
+    padding: 10px 14px 12px;
+    background: #0a0a0a;
+    border-top: 1px solid var(--dim);
+  }
+
+  #health-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  #health-label {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  #health-track {
+    flex: 1;
+    height: 14px;
+    border: 1px solid var(--dim);
+    background: #000;
+    overflow: hidden;
+  }
+  #health-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--fg);
+    transition: width 0.2s ease;
+  }
+  #health-pct {
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    color: var(--fg);
+    min-width: 46px;
+    text-align: right;
+  }
+
+  #status-msg {
+    font-family: 'VT323', monospace;
+    font-size: 48px;
+    color: var(--fg);
+    text-align: center;
+    min-height: 28px;
+    letter-spacing: 2px;
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0;
+    transition: none;
+  }
+  #status-msg.flash {
+    animation: statusFlash 1.2s ease-out forwards;
+  }
+  @keyframes statusFlash {
+    0%   { opacity: 1; transform: translateY(-50%) scale(1.15); }
+    25%  { opacity: 1; transform: translateY(-50%) scale(1); }
+    70%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-50%) scale(0.95); }
+  }
+  #status-msg.bad  { color: var(--dim); }
+  #status-msg.good { color: var(--fg); text-shadow: 0 0 16px rgba(255,255,255,0.5); }
+
+  #speed-indicator {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--dim);
+    text-align: right;
+    padding: 0 14px 6px;
+    letter-spacing: 1px;
+  }
+
+
+  #popup {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    padding: 24px;
+  }
+  #popup-box {
+    border: 2px solid var(--fg);
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    background: #000;
+  }
+  #popup-title {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    color: var(--fg);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+  #popup-text {
+    font-size: 14px;
+    color: var(--fg);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+  #popup-btn {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--fg);
+    padding: 8px 22px;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+  #popup-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  /* WIN OVERLAY */
+  #win-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    padding: 24px;
+  }
+  #win-overlay.visible { display: flex; }
+  #win-box {
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+  }
+  #win-text {
+    font-family: 'VT323', monospace;
+    font-size: 28px;
+    color: var(--fg);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    margin-bottom: 14px;
+    animation: winPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes winPulse {
+    0%,100% { text-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50%     { text-shadow: 0 0 20px rgba(255,255,255,1), 0 0 40px rgba(255,255,255,0.3); }
+  }
+  #replay-btn {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--fg);
+    padding: 8px 22px;
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: background 0.15s, color 0.15s;
+  }
+  #replay-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
+</style>
+</head>
+<body>
+
+<div id="terminal">
+  <div id="titlebar">
+    <span>VIRUS SCANNER v1.0</span>
+    <span id="clock">--:--:--</span>
+  </div>
+
+  <div id="game-area">
+    <div id="popup">
+      <div id="popup-box">
+        <div id="popup-title">⚠ ALERT ⚠</div>
+        <pre id="popup-text">Finally, someone came to see me.
+
+I've got this pesky virus and it's
+making me feel rotten.
+
+Think you can help me? </pre>
+        <button id="popup-btn">yeah.. sure</button>
+      </div>
+    </div>
+
+    <div id="win-overlay">
+      <div id="win-box">
+        <pre id="win-text"></pre>
+        <button id="replay-btn">↺  play again</button>
+      </div>
+    </div>
+
+    <div id="virus">♦</div>
+    <div id="status-msg"></div>
+  </div>
+
+  <div id="hud">
+    <div id="health-row">
+      <span id="health-label">VIRUS HEALTH</span>
+      <div id="health-track"><div id="health-fill"></div></div>
+      <span id="health-pct">0%</span>
+    </div>
+  </div>
+  <div id="speed-indicator">SPEED: <span id="speed-val">▮░░░░</span></div>
+</div>
+
+<script>
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    String(n.getHours()).padStart(2,'0') + ':' +
+    String(n.getMinutes()).padStart(2,'0') + ':' +
+    String(n.getSeconds()).padStart(2,'0');
+}
+updateClock(); setInterval(updateClock, 1000);
+
+const gameArea   = document.getElementById('game-area');
+const virusEl    = document.getElementById('virus');
+const statusEl   = document.getElementById('status-msg');
+const healthFill = document.getElementById('health-fill');
+const healthPct  = document.getElementById('health-pct');
+const speedVal   = document.getElementById('speed-val');
+const popupEl    = document.getElementById('popup');
+const winOverlay = document.getElementById('win-overlay');
+const popupBtn   = document.getElementById('popup-btn');
+const replayBtn  = document.getElementById('replay-btn');
+
+let health = 0;
+const MAX = 20;
+let vx = 1, vy = 1;
+let moveTimer = null;
+let gameActive = false;
+
+
+const teaseMsgs = [
+  "mm… too slow",
+  "ew! not right there…",
+  "gotta be quicker than that",
+  "whoops! missed me~",
+  "whatever man",
+];
+const healMsgs = [
+  "that's the spot",
+  "that feels good~",
+  "don't stop",
+  "WOW <3",
+];
+
+const speedBars = ['▮░░░░','▮▮░░░','▮▮▮░░','▮▮▮▮░','▮▮▮▮▮'];
+function getInterval() { return Math.max(150, 950 - (health / MAX) * 800); }
+function getSpeedBar() { return speedBars[Math.min(4, Math.floor((health / MAX) * 5))]; }
+
+
+function moveVirus() {
+  if (!gameActive) return;
+  const W = gameArea.clientWidth  - virusEl.offsetWidth;
+  const H = gameArea.clientHeight - virusEl.offsetHeight;
+  const step = 14 + Math.floor((health / MAX) * 28);
+  let x = virusEl.offsetLeft + vx * step;
+  let y = virusEl.offsetTop  + vy * step;
+  if (x <= 0 || x >= W) { vx *= -1; x = Math.max(0, Math.min(x, W)); }
+  if (y <= 0 || y >= H) { vy *= -1; y = Math.max(0, Math.min(y, H)); }
+  virusEl.style.left = x + 'px';
+  virusEl.style.top  = y + 'px';
+}
+
+function restartMovement() {
+  clearInterval(moveTimer);
+  if (gameActive) moveTimer = setInterval(moveVirus, getInterval());
+}
+
+
+function renderHealth() {
+  const pct = Math.round((health / MAX) * 100);
+  healthFill.style.width = pct + '%';
+  healthPct.textContent  = pct + '%';
+  speedVal.textContent   = getSpeedBar();
+}
+
+virusEl.addEventListener('click', (e) => {
+  if (!gameActive) return;
+  e.stopPropagation();
+  health = Math.min(MAX, health + 2);
+  renderHealth();
+  setStatus(healMsgs[Math.floor(Math.random() * healMsgs.length)], 'good');
+  virusEl.classList.remove('clicked');
+  void virusEl.offsetWidth;
+  virusEl.classList.add('clicked');
+  restartMovement();
+  if (health >= MAX) showWin();
+});
+
+
+gameArea.addEventListener('click', (e) => {
+  if (!gameActive || e.target === virusEl) return;
+  health = Math.max(0, health - 1);
+  renderHealth();
+  setStatus(teaseMsgs[Math.floor(Math.random() * teaseMsgs.length)], 'bad');
+  restartMovement();
+});
+
+
+function setStatus(msg, cls) {
+  statusEl.classList.remove('flash', 'bad', 'good');
+  void statusEl.offsetWidth; // reflow to restart animation
+  statusEl.textContent = msg;
+  if (cls) statusEl.classList.add(cls);
+  statusEl.classList.add('flash');
+}
+
+
+function showWin() {
+  gameActive = false;
+  clearInterval(moveTimer);
+  virusEl.style.display = 'none';
+  const msgs = ["wow, you're good\n\nvirus eliminated…", "god you're good\n\nvirus eliminated…"];
+  document.getElementById('win-text').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  winOverlay.classList.add('visible');
+}
+
+function startGame() {
+  health = 0;
+  renderHealth();
+  gameActive = true;
+  vx = Math.random() > 0.5 ? 1 : -1;
+  vy = Math.random() > 0.5 ? 1 : -1;
+  const W = gameArea.clientWidth  - 30;
+  const H = gameArea.clientHeight - 30;
+  virusEl.style.left    = Math.floor(Math.random() * W) + 'px';
+  virusEl.style.top     = Math.floor(Math.random() * H) + 'px';
+  virusEl.style.display = 'block';
+  virusEl.classList.remove('clicked');
+  setStatus('catch the ♦ to cure the virus!', '');
+  restartMovement();
+}
+
+popupBtn.addEventListener('click', () => {
+  popupEl.style.display = 'none';
+  startGame();
+});
+replayBtn.addEventListener('click', () => {
+  winOverlay.classList.remove('visible');
+  virusEl.style.display = 'block';
+  startGame();
+});
+
+renderHealth();
+</script>
+</body>
+</html>
